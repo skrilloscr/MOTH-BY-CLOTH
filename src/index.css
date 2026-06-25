@@ -1,0 +1,189 @@
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
+
+/* ─── Colour tokens ───────────────────────────────────────────────────────── */
+
+:root {
+  /* Light mode — warm amber / teal palette */
+  --brand-black:    247 241 233;   /* warm cream background     */
+  --brand-surface:  237 229 215;   /* card / panel surface      */
+  --brand-surface2: 227 218 202;   /* elevated surface          */
+  --brand-border:   200 182 158;   /* warm border               */
+  --brand-cream:    24  16  10;    /* primary text (dark)       */
+  --brand-gold:     182 78  35;    /* amber accent              */
+}
+
+.dark {
+  /* Dark mode — atmospheric teal-black */
+  --brand-black:    7   12  12;    /* near-black background     */
+  --brand-surface:  13  23  23;    /* dark card surface         */
+  --brand-surface2: 19  31  31;    /* elevated surface          */
+  --brand-border:   28  46  45;    /* subtle teal border        */
+  --brand-cream:    237 232 222;   /* warm off-white text       */
+  --brand-gold:     184 120 80;    /* amber / copper accent     */
+}
+
+/* ─── Base ────────────────────────────────────────────────────────────────── */
+
+@layer base {
+  * { box-sizing: border-box; }
+
+  body {
+    font-family: 'DM Sans', sans-serif;
+    @apply bg-brand-black text-brand-cream;
+    background-attachment: fixed;
+    min-height: 100vh;
+    transition: background-color 0.4s ease, color 0.3s ease;
+  }
+
+  /* Light-mode gradient — subtle amber left, teal right */
+  body {
+    background-image:
+      radial-gradient(ellipse 52% 58% at 6%  52%, rgba(210 110 45 / 0.09) 0%, transparent 62%),
+      radial-gradient(ellipse 46% 50% at 90% 32%, rgba(38  98  92 / 0.07) 0%, transparent 58%);
+  }
+
+  /* Dark-mode gradient — deep atmospheric glow */
+  .dark body {
+    background-image:
+      radial-gradient(ellipse 62% 65% at 10% 55%, rgba(175 68 18 / 0.22)  0%, transparent 62%),
+      radial-gradient(ellipse 55% 55% at 88% 28%, rgba(32  78 75 / 0.20)  0%, transparent 60%),
+      radial-gradient(ellipse 40% 40% at 50% 92%, rgba(20  50 48 / 0.14)  0%, transparent 55%);
+  }
+
+  /* Grain texture — dark mode only */
+  body::before {
+    content: '';
+    position: fixed;
+    inset: 0;
+    background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='300' height='300'%3E%3Cfilter id='n'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.78' numOctaves='4' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='300' height='300' filter='url(%23n)' opacity='1'/%3E%3C/svg%3E");
+    opacity: 0;
+    pointer-events: none;
+    z-index: 9999;
+    transition: opacity 0.5s ease;
+  }
+
+  .dark body::before { opacity: 0.038; }
+
+  ::-webkit-scrollbar       { width: 4px; }
+  ::-webkit-scrollbar-track { @apply bg-brand-black; }
+  ::-webkit-scrollbar-thumb { @apply bg-brand-border; }
+  ::-webkit-scrollbar-thumb:hover { @apply bg-brand-gold; }
+}
+
+/* ─── Futuristic keyframes ────────────────────────────────────────────────── */
+
+@keyframes float {
+  0%, 100% { transform: translateY(0px); }
+  50%       { transform: translateY(-10px); }
+}
+
+@keyframes glow-pulse {
+  0%, 100% { box-shadow: 0 0 8px rgba(184,120,80,0.25); }
+  50%       { box-shadow: 0 0 28px rgba(184,120,80,0.65), 0 0 60px rgba(184,120,80,0.2); }
+}
+
+@keyframes text-glow {
+  0%, 100% { text-shadow: 0 0 10px rgba(184,120,80,0.4); }
+  50%       { text-shadow: 0 0 30px rgba(184,120,80,0.9), 0 0 60px rgba(184,120,80,0.35); }
+}
+
+@keyframes scan-line {
+  0%   { transform: translateY(-8px); opacity: 0; }
+  10%  { opacity: 0.06; }
+  90%  { opacity: 0.06; }
+  100% { transform: translateY(100vh); opacity: 0; }
+}
+
+@keyframes border-march {
+  0%   { background-position: 0% 0%; }
+  100% { background-position: 200% 0%; }
+}
+
+@keyframes fade-up {
+  from { opacity: 0; transform: translateY(28px); }
+  to   { opacity: 1; transform: translateY(0); }
+}
+
+@keyframes reveal-width {
+  from { width: 0; }
+  to   { width: 100%; }
+}
+
+/* ─── Futuristic utilities ────────────────────────────────────────────────── */
+
+.animate-float        { animation: float 6s ease-in-out infinite; }
+.animate-glow-pulse   { animation: glow-pulse 3s ease-in-out infinite; }
+.animate-text-glow    { animation: text-glow 3.5s ease-in-out infinite; }
+.animate-fade-up      { animation: fade-up 0.7s cubic-bezier(0.22,1,0.36,1) both; }
+
+/* Scan-line overlay for hero sections */
+.scanlines::after {
+  content: '';
+  position: absolute;
+  inset: 0;
+  background: repeating-linear-gradient(
+    0deg,
+    transparent,
+    transparent 3px,
+    rgba(0,0,0,0.04) 3px,
+    rgba(0,0,0,0.04) 4px
+  );
+  pointer-events: none;
+  z-index: 1;
+}
+
+/* Animated gold border glow */
+.border-glow {
+  box-shadow: 0 0 0 1px rgba(184,120,80,0.3), inset 0 0 20px rgba(184,120,80,0.04);
+  transition: box-shadow 0.4s ease;
+}
+.border-glow:hover {
+  box-shadow: 0 0 0 1px rgba(184,120,80,0.7), 0 0 24px rgba(184,120,80,0.22), inset 0 0 20px rgba(184,120,80,0.06);
+}
+
+/* Futuristic grid background tile */
+.grid-bg {
+  background-image:
+    linear-gradient(rgba(184,120,80,0.04) 1px, transparent 1px),
+    linear-gradient(90deg, rgba(184,120,80,0.04) 1px, transparent 1px);
+  background-size: 48px 48px;
+}
+
+/* Corner clip — top-right geometric cutout */
+.clip-corner {
+  clip-path: polygon(0 0, calc(100% - 18px) 0, 100% 18px, 100% 100%, 0 100%);
+}
+
+/* Text with gradient shimmer */
+.text-shimmer {
+  background: linear-gradient(90deg, rgb(var(--brand-cream)), rgb(var(--brand-gold)), rgb(var(--brand-cream)));
+  background-size: 200%;
+  -webkit-background-clip: text;
+  -webkit-text-fill-color: transparent;
+  background-clip: text;
+  animation: border-march 4s linear infinite;
+}
+
+/* ─── Components ──────────────────────────────────────────────────────────── */
+
+@layer components {
+  .btn-primary {
+    @apply bg-brand-cream text-brand-black px-6 py-3 font-medium tracking-[0.2em]
+           hover:bg-brand-gold hover:text-white
+           transition-all duration-300 uppercase text-xs;
+  }
+
+  .btn-secondary {
+    @apply border border-brand-cream/60 text-brand-cream px-6 py-3 font-medium tracking-[0.2em]
+           hover:bg-brand-cream hover:text-brand-black
+           transition-all duration-300 uppercase text-xs;
+  }
+
+  .input-field {
+    @apply w-full bg-brand-surface/80 border border-brand-border text-brand-cream
+           px-4 py-3 focus:outline-none focus:border-brand-gold
+           transition-colors duration-200 placeholder:text-brand-gold/30;
+  }
+}

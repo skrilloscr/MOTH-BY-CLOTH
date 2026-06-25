@@ -1,0 +1,46 @@
+require('dotenv').config()
+const mongoose = require('mongoose')
+const Product = require('./models/Product')
+
+const products = [
+  {
+    name: 'When Man Becomes God Tee — Black',
+    category: 'men',
+    type: 't-shirts',
+    price: 159,
+    originalPrice: null,
+    sizes: ['S', 'M', 'L', 'XL', 'XXL'],
+    colors: ['black'],
+    image: '/images/products/theyyam-black.jpg',
+    rating: 5,
+    reviews: 0,
+    description: '"Theyyam Threads" encapsulates the essence of Kerala\'s vibrant Theyyam art form into modern wearable art. Inspired by the rich cultural heritage of Kerala, this design seamlessly blends tradition with contemporary streetwear. The back features a dramatic Theyyam face illustration with golden wave motifs — bold, spiritual, and made for those who move between worlds.\n\nWhen Man Becomes God.',
+    featured: true,
+    isNew: true,
+  },
+  {
+    name: 'When Man Becomes God Tee — White',
+    category: 'men',
+    type: 't-shirts',
+    price: 159,
+    originalPrice: null,
+    sizes: ['S', 'M', 'L', 'XL', 'XXL'],
+    colors: ['white'],
+    image: '/images/products/theyyam-white.jpg',
+    rating: 5,
+    reviews: 0,
+    description: '"Theyyam Threads" encapsulates the essence of Kerala\'s vibrant Theyyam art form into modern wearable art. Inspired by the rich cultural heritage of Kerala, this design seamlessly blends tradition with contemporary streetwear. The back features a dramatic Theyyam face illustration — on white, the stark contrast of the monochrome artwork hits differently.\n\nWhen Man Becomes God.',
+    featured: true,
+    isNew: true,
+  },
+]
+
+async function seed() {
+  await mongoose.connect(process.env.MONGO_URI)
+  await Product.deleteMany({})
+  await Product.insertMany(products)
+  console.log(`Seeded ${products.length} products`)
+  process.exit(0)
+}
+
+seed().catch((err) => { console.error(err); process.exit(1) })
