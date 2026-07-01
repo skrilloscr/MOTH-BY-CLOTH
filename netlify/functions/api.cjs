@@ -2,8 +2,18 @@ const serverless = require('serverless-http')
 const express = require('express')
 const mongoose = require('mongoose')
 
+mongoose.set('bufferCommands', false)
+
 let handler = null
-let isConnected = false
+
+async function connectDB() {
+  if (mongoose.connection.readyState === 1) return
+  await mongoose.connect(process.env.MONGO_URI, {
+    serverSelectionTimeoutMS: 8000,
+    socketTimeoutMS: 8000,
+    connectTimeoutMS: 8000,
+  })
+}
 
 function buildApp() {
   const app = express()
@@ -25,12 +35,12 @@ function buildApp() {
 
 exports.handler = async (event, context) => {
   context.callbackWaitsForEmptyEventLoop = false
-
-  if (!isConnected) {
-    await mongoose.connect(process.env.MONGO_URI)
-    isConnected = true
+  try {
+    await connectDB()
+  } catch (err) {
+    console.error('DB connect error:', err.message)
+    return { statusCode: 500, body: JSON.stringify({ message: err.message }) }
   }
-
   if (!handler) handler = buildApp()
   return handler(event, context)
 }
