@@ -7,6 +7,7 @@ import { WishlistProvider } from './context/WishlistContext'
 import Navbar from './components/Navbar'
 import Footer from './components/Footer'
 import PageTransition from './components/PageTransition'
+import SpaceBackground from './components/SpaceBackground'
 import ProtectedRoute from './components/ProtectedRoute'
 import Home from './pages/Home'
 import Products from './pages/Products'
@@ -43,6 +44,7 @@ export default function App() {
           <CartProvider>
             <WishlistProvider>
               <div className="min-h-screen flex flex-col">
+                <SpaceBackground />
                 <Navbar />
                 <main className="flex-1">
                   <AppRoutes />
