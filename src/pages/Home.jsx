@@ -4,6 +4,9 @@ import { motion, useScroll, useTransform } from 'framer-motion'
 import api from '../utils/api'
 import ProductCard from '../components/ProductCard'
 import HeroCanvas from '../components/HeroCanvas'
+import FloatingCrystal from '../components/FloatingCrystal'
+import PromoCanvas from '../components/PromoCanvas'
+import Btn3D from '../components/Btn3D'
 
 const categories = [
   { id: 'men',   label: 'Men',   sub: "Men's Collection",   image: '/images/category-men.png' },
@@ -44,37 +47,29 @@ export default function Home() {
       {/* ── Hero ─────────────────────────────────────────────────────────────── */}
       <section ref={heroRef} className="relative h-[92vh] min-h-[620px] flex items-center overflow-hidden">
 
-        {/* Three.js canvas */}
         <HeroCanvas />
 
-        {/* Atmospheric gradient overlay */}
         <div className="absolute inset-0 bg-gradient-to-r from-brand-black via-brand-black/65 to-transparent z-[1] pointer-events-none" />
         <div className="absolute inset-0 bg-gradient-to-t from-brand-black/60 via-transparent to-transparent z-[1] pointer-events-none" />
-
-        {/* Scan-line texture */}
         <div className="scanlines absolute inset-0 z-[2] pointer-events-none" />
 
         {/* Horizontal rule accents */}
-        <motion.div
-          className="absolute left-0 right-0 top-[28%] z-[2] pointer-events-none"
+        <motion.div className="absolute left-0 right-0 top-[28%] z-[2] pointer-events-none"
           initial={{ scaleX: 0 }} animate={{ scaleX: 1 }}
           transition={{ delay: 1.2, duration: 1.6, ease: [0.22, 1, 0.36, 1] }}
-          style={{ transformOrigin: 'left' }}
-        >
+          style={{ transformOrigin: 'left' }}>
           <div className="h-px bg-gradient-to-r from-transparent via-brand-gold/20 to-transparent" />
         </motion.div>
-        <motion.div
-          className="absolute left-0 right-0 top-[72%] z-[2] pointer-events-none"
+        <motion.div className="absolute left-0 right-0 top-[72%] z-[2] pointer-events-none"
           initial={{ scaleX: 0 }} animate={{ scaleX: 1 }}
           transition={{ delay: 1.4, duration: 1.6, ease: [0.22, 1, 0.36, 1] }}
-          style={{ transformOrigin: 'right' }}
-        >
+          style={{ transformOrigin: 'right' }}>
           <div className="h-px bg-gradient-to-r from-transparent via-brand-gold/15 to-transparent" />
         </motion.div>
 
-        {/* Hero content — parallax on scroll */}
+        {/* Hero content */}
         <motion.div
-          className="relative z-10 max-w-7xl mx-auto px-4 sm:px-6 lg:px-8"
+          className="relative z-10 max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 w-full"
           style={{ opacity: heroOpacity, y: heroY }}
         >
           <motion.div variants={stagger} initial="hidden" animate="visible">
@@ -84,10 +79,8 @@ export default function Home() {
               New Collection 2026
             </motion.p>
 
-            <motion.h1
-              variants={heroItem}
-              className="font-display text-brand-cream text-6xl md:text-8xl lg:text-9xl font-bold leading-none tracking-tight max-w-xl uppercase"
-            >
+            <motion.h1 variants={heroItem}
+              className="font-display text-brand-cream text-6xl md:text-8xl lg:text-9xl font-bold leading-none tracking-tight max-w-xl uppercase">
               Cloth<br />
               <span className="text-shimmer">By Moth</span>
             </motion.h1>
@@ -96,46 +89,43 @@ export default function Home() {
               Minimal · Timeless · Refined · Mysterious
             </motion.p>
 
-            <motion.div variants={heroItem} className="mt-10 flex flex-wrap gap-4">
-              <motion.div whileHover={{ scale: 1.03 }} whileTap={{ scale: 0.97 }}>
-                <Link to="/products" className="btn-primary px-8 py-4 text-xs animate-glow-pulse inline-block">
-                  Shop Now
-                </Link>
-              </motion.div>
+            {/* 3-D buttons row */}
+            <motion.div variants={heroItem} className="mt-10 flex flex-wrap gap-5 items-center">
+              <Btn3D to="/products" variant="cream">Shop Now</Btn3D>
+              <Btn3D to="/products?category=men" variant="gold">Men's Edit</Btn3D>
             </motion.div>
 
             {/* Scroll indicator */}
-            <motion.div
-              variants={heroItem}
-              className="mt-16 flex items-center gap-3"
-            >
-              <div className="flex flex-col gap-1">
-                <motion.div
-                  className="w-px h-8 bg-brand-gold/40 mx-auto"
-                  animate={{ scaleY: [1, 0.3, 1] }}
-                  transition={{ duration: 1.8, repeat: Infinity, ease: 'easeInOut' }}
-                />
-              </div>
+            <motion.div variants={heroItem} className="mt-14 flex items-center gap-3">
+              <motion.div
+                className="w-px h-8 bg-brand-gold/40"
+                animate={{ scaleY: [1, 0.3, 1] }}
+                transition={{ duration: 1.8, repeat: Infinity, ease: 'easeInOut' }}
+              />
               <span className="text-brand-gold/40 text-[8px] tracking-[0.4em] uppercase">Scroll</span>
             </motion.div>
 
           </motion.div>
         </motion.div>
 
-        {/* Corner bracket — top right */}
+        {/* Floating crystal — top-right accent */}
         <motion.div
-          className="absolute top-8 right-8 w-12 h-12 z-10 pointer-events-none"
-          initial={{ opacity: 0 }} animate={{ opacity: 1 }}
-          transition={{ delay: 1.8, duration: 0.6 }}
+          className="absolute top-16 right-16 z-10 pointer-events-none hidden lg:block"
+          initial={{ opacity: 0, scale: 0.5 }}
+          animate={{ opacity: 1, scale: 1 }}
+          transition={{ delay: 1.8, duration: 1, ease: [0.22, 1, 0.36, 1] }}
         >
+          <FloatingCrystal size={120} speed={0.8} />
+        </motion.div>
+
+        {/* Corner brackets */}
+        <motion.div className="absolute top-8 right-8 w-12 h-12 z-10 pointer-events-none"
+          initial={{ opacity: 0 }} animate={{ opacity: 1 }} transition={{ delay: 1.8 }}>
           <div className="absolute top-0 right-0 w-full h-px bg-brand-gold/30" />
           <div className="absolute top-0 right-0 w-px h-full bg-brand-gold/30" />
         </motion.div>
-        <motion.div
-          className="absolute bottom-8 left-8 w-12 h-12 z-10 pointer-events-none"
-          initial={{ opacity: 0 }} animate={{ opacity: 1 }}
-          transition={{ delay: 2.0, duration: 0.6 }}
-        >
+        <motion.div className="absolute bottom-8 left-8 w-12 h-12 z-10 pointer-events-none"
+          initial={{ opacity: 0 }} animate={{ opacity: 1 }} transition={{ delay: 2.0 }}>
           <div className="absolute bottom-0 left-0 w-full h-px bg-brand-gold/20" />
           <div className="absolute bottom-0 left-0 w-px h-full bg-brand-gold/20" />
         </motion.div>
@@ -144,9 +134,7 @@ export default function Home() {
       {/* ── Categories ────────────────────────────────────────────────────────── */}
       <motion.section
         className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-20"
-        variants={sectionReveal}
-        initial="hidden"
-        whileInView="visible"
+        variants={sectionReveal} initial="hidden" whileInView="visible"
         viewport={{ once: true, margin: '-80px' }}
       >
         <div className="flex items-center justify-between mb-10">
@@ -154,9 +142,11 @@ export default function Home() {
             <p className="text-brand-gold text-[9px] tracking-[0.4em] uppercase mb-2 flex items-center gap-2">
               <span className="w-4 h-px bg-brand-gold/60 inline-block" />Explore
             </p>
-            <h2 className="font-display text-brand-cream text-2xl font-bold tracking-wider uppercase">
-              Shop by Category
-            </h2>
+            <h2 className="font-display text-brand-cream text-2xl font-bold tracking-wider uppercase">Shop by Category</h2>
+          </div>
+          {/* Small crystal accent */}
+          <div className="pointer-events-none hidden sm:block">
+            <FloatingCrystal size={60} speed={1.2} color={0x9a6040} />
           </div>
         </div>
 
@@ -175,30 +165,25 @@ export default function Home() {
                 className="group relative overflow-hidden aspect-[3/4] bg-brand-surface block"
                 style={{ clipPath: 'polygon(0 0, calc(100% - 20px) 0, 100% 20px, 100% 100%, 0 100%)' }}
               >
-                <img
-                  src={cat.image}
-                  alt={cat.label}
-                  className="w-full h-full object-cover opacity-50 group-hover:opacity-70 group-hover:scale-105 transition-all duration-700"
-                />
-                {/* Grid overlay */}
+                <img src={cat.image} alt={cat.label}
+                  className="w-full h-full object-cover opacity-50 group-hover:opacity-70 group-hover:scale-105 transition-all duration-700" />
                 <div className="absolute inset-0 grid-bg opacity-20 group-hover:opacity-30 transition-opacity duration-500" />
                 <div className="absolute inset-0 bg-gradient-to-t from-brand-black/85 via-brand-black/20 to-transparent" />
-
-                {/* Corner accent */}
                 <div className="absolute top-4 right-4 w-8 h-8">
                   <div className="absolute top-0 right-0 w-full h-px bg-brand-gold/50 group-hover:bg-brand-gold/80 transition-colors duration-300" />
                   <div className="absolute top-0 right-0 w-px h-full bg-brand-gold/50 group-hover:bg-brand-gold/80 transition-colors duration-300" />
                 </div>
-
                 <div className="absolute bottom-8 left-8">
                   <p className="text-brand-gold text-[9px] tracking-[0.4em] uppercase mb-1 opacity-70">{cat.sub}</p>
-                  <h3 className="font-display text-brand-cream text-4xl font-bold uppercase tracking-wider">
-                    {cat.label}
-                  </h3>
+                  <h3 className="font-display text-brand-cream text-4xl font-bold uppercase tracking-wider">{cat.label}</h3>
                   <div className="flex items-center gap-2 mt-4 opacity-0 group-hover:opacity-100 transition-opacity duration-400">
                     <div className="h-px w-6 bg-brand-gold" />
                     <span className="text-brand-gold text-[9px] tracking-[0.35em] uppercase">Shop Now</span>
                   </div>
+                </div>
+                {/* 3D button inside category */}
+                <div className="absolute bottom-8 right-8 opacity-0 group-hover:opacity-100 transition-all duration-400 translate-y-2 group-hover:translate-y-0">
+                  <Btn3D variant="gold" className="!py-2 !px-4 !text-[8px]">Explore</Btn3D>
                 </div>
               </Link>
             </motion.div>
@@ -209,9 +194,7 @@ export default function Home() {
       {/* ── Featured Products ──────────────────────────────────────────────────── */}
       <motion.section
         className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 pb-20"
-        variants={sectionReveal}
-        initial="hidden"
-        whileInView="visible"
+        variants={sectionReveal} initial="hidden" whileInView="visible"
         viewport={{ once: true, margin: '-60px' }}
       >
         <div className="flex items-end justify-between mb-10">
@@ -219,9 +202,7 @@ export default function Home() {
             <p className="text-brand-gold text-[9px] tracking-[0.4em] uppercase mb-2 flex items-center gap-2">
               <span className="w-4 h-px bg-brand-gold/60 inline-block" />Curated
             </p>
-            <h2 className="font-display text-brand-cream text-2xl font-bold tracking-wider uppercase">
-              Featured Pieces
-            </h2>
+            <h2 className="font-display text-brand-cream text-2xl font-bold tracking-wider uppercase">Featured Pieces</h2>
           </div>
           <Link to="/products" className="text-[9px] text-brand-gold hover:text-brand-cream tracking-[0.3em] uppercase transition-colors border-b border-brand-gold/50 hover:border-brand-cream pb-0.5">
             View All
@@ -237,19 +218,21 @@ export default function Home() {
       {/* ── Promo Banner ──────────────────────────────────────────────────────── */}
       <motion.section
         className="relative border-t border-b border-brand-border py-24 bg-brand-surface overflow-hidden"
-        variants={sectionReveal}
-        initial="hidden"
-        whileInView="visible"
+        variants={sectionReveal} initial="hidden" whileInView="visible"
         viewport={{ once: true, margin: '-60px' }}
       >
-        {/* Grid background */}
-        <div className="absolute inset-0 grid-bg opacity-30 pointer-events-none" />
+        {/* Three.js animated background */}
+        <PromoCanvas />
 
-        {/* Animated glow orbs */}
-        <div className="absolute left-1/4 top-1/2 -translate-y-1/2 w-64 h-64 rounded-full bg-brand-gold/5 blur-3xl animate-glow-pulse pointer-events-none" />
-        <div className="absolute right-1/4 top-1/2 -translate-y-1/2 w-48 h-48 rounded-full bg-brand-gold/5 blur-3xl animate-glow-pulse pointer-events-none" style={{ animationDelay: '1.5s' }} />
+        {/* Grid overlay */}
+        <div className="absolute inset-0 grid-bg opacity-20 pointer-events-none z-[1]" />
 
         <div className="relative z-10 max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 text-center">
+          {/* Crystal centrepiece */}
+          <div className="flex justify-center mb-2 pointer-events-none">
+            <FloatingCrystal size={90} speed={1.4} />
+          </div>
+
           <p className="text-brand-gold text-[9px] tracking-[0.5em] uppercase mb-4">Limited Time</p>
           <h2 className="font-display text-brand-cream text-4xl md:text-6xl font-bold uppercase tracking-wide mb-4">
             Launch Drop
@@ -257,9 +240,10 @@ export default function Home() {
           <p className="text-brand-gold/70 text-xs tracking-[0.3em] uppercase mb-10">
             Free delivery across UAE on orders above AED 200
           </p>
-          <motion.div whileHover={{ scale: 1.04 }} whileTap={{ scale: 0.97 }}>
-            <Link to="/products" className="btn-primary px-10 py-4 inline-block">Shop the Edit</Link>
-          </motion.div>
+          <div className="flex flex-wrap gap-4 justify-center">
+            <Btn3D to="/products" variant="cream">Shop the Edit</Btn3D>
+            <Btn3D to="/products?isNew=true" variant="gold">New Arrivals</Btn3D>
+          </div>
         </div>
       </motion.section>
 
@@ -267,9 +251,7 @@ export default function Home() {
       {newArrivals.length > 0 && (
         <motion.section
           className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-20"
-          variants={sectionReveal}
-          initial="hidden"
-          whileInView="visible"
+          variants={sectionReveal} initial="hidden" whileInView="visible"
           viewport={{ once: true, margin: '-60px' }}
         >
           <div className="flex items-end justify-between mb-10">
@@ -277,9 +259,7 @@ export default function Home() {
               <p className="text-brand-gold text-[9px] tracking-[0.4em] uppercase mb-2 flex items-center gap-2">
                 <span className="w-4 h-px bg-brand-gold/60 inline-block" />Just In
               </p>
-              <h2 className="font-display text-brand-cream text-2xl font-bold tracking-wider uppercase">
-                New Arrivals
-              </h2>
+              <h2 className="font-display text-brand-cream text-2xl font-bold tracking-wider uppercase">New Arrivals</h2>
             </div>
             <Link to="/products?sort=newest" className="text-[9px] text-brand-gold hover:text-brand-cream tracking-[0.3em] uppercase transition-colors border-b border-brand-gold/50 hover:border-brand-cream pb-0.5">
               See All
@@ -296,9 +276,7 @@ export default function Home() {
       {/* ── Trust Badges ──────────────────────────────────────────────────────── */}
       <motion.section
         className="relative border-t border-brand-border py-14 bg-brand-surface overflow-hidden"
-        variants={sectionReveal}
-        initial="hidden"
-        whileInView="visible"
+        variants={sectionReveal} initial="hidden" whileInView="visible"
         viewport={{ once: true, margin: '-40px' }}
       >
         <div className="absolute inset-0 grid-bg opacity-20 pointer-events-none" />
